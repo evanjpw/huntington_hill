@@ -5,6 +5,7 @@ description = "A small Python module for determining appropriate platform-specif
 category = "dev"
 optional = false
 python-versions = "*"
+readme = "README.md"
 
 [[package]]
 name = "atomicwrites"

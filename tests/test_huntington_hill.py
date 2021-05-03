@@ -1,7 +1,19 @@
 """
+Unit tests for testing the Huntington–Hill method of equal proportions.
+
+These tests compare the congressional seat allocations that we calculate
+with the actual (and fake) numbers, using real (and fake) census data.
 """
+
 from huntington_hill import __version__, calculate_apportionment
 
+
+# The test data below are maps of state abbreviations to a tuple of population
+# and (correct) number of congressional seats, which is used to compare the
+# results of the calculation function with the actual value.
+
+# The official 2010 census population data, and the official resulting number of
+# congressional seats for each state.
 TEST_DATA_2010 = {
     "CA": (37253956, 53),
     "TX": (25145561, 36),
@@ -54,8 +66,11 @@ TEST_DATA_2010 = {
     "VT": (625741, 1),
     "WY": (563626, 1),
 }
+# The total number of congressional seats in 2010 (fixed at 435 since 1930)
 SEAT_COUNT_2010 = 435
 
+# The official 2020 census population data, and the official resulting number of
+# congressional seats for each state.
 TEST_DATA_2020 = {
     "CA": (39538223, 52),
     "TX": (29145505, 38),
@@ -108,32 +123,51 @@ TEST_DATA_2020 = {
     "VT": (643077, 1),
     "WY": (576851, 1),
 }
+# The total number of congressional seats in 2020 (fixed at 435 since 1930)
 SEAT_COUNT_2020 = 435
 
+# The fake example census data used to explain how calculations work on
+# the US census web site
 TEST_DATA_FAKE = {}
 SEAT_COUNT_FAKE = 0
 
 
 def test_version():
+    """A goofy test that `poetry init` writes."""
     assert __version__ == "0.1.0"
 
 
 def do_data_test(test_data, seat_count):
+    """
+    Try the allocation function using a map of states to populations and compare with the
+    correct seat allocations.
+
+    :param test_data: A map of state to a tuple of population and seats, to be used as test data
+    :param seat_count: The total number of seats to allocate
+    """
+    # Create a map of states to populations
     test_input = {k: v[0] for k, v in test_data.items()}
+    # Run the allocation function and collect the output
     test_output = calculate_apportionment(test_input, seat_count)
+    # The number of states in the input should be the same as the number of states in the output
     assert len(test_data) == len(test_output)
+    # The sum of the seats in the output should equal the total number of seats
     assert seat_count == sum(test_output.values())
+    # Compare the number of seats in each state in the output to the test data expectation
     for state, seats in test_output.items():
         assert test_data[state][1] == seats
 
 
 def test_2010_data():
+    """Test the official 2010 census data."""
     do_data_test(TEST_DATA_2010, SEAT_COUNT_2010)
 
 
 def test_2020_data():
+    """Test the official 2020 census data."""
     do_data_test(TEST_DATA_2020, SEAT_COUNT_2020)
 
 
 def test_FAKE_data():
+    """Test the fake census data use in examples on the US census bureau web site"""
     do_data_test(TEST_DATA_FAKE, SEAT_COUNT_FAKE)
