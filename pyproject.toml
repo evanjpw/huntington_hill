@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "huntinton_hill"
+version = "0.1.0"
+description = ""
+authors = ["Evan Williams <evan.williams@pathai.com>"]
+repository = "https://github.com/evanjpw/huntington_hill.git"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "21.4b2"
+flake8 = "3.9.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 89
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = ''''''
